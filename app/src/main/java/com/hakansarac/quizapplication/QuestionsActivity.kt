@@ -32,12 +32,17 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         textViewOptionTwo.setOnClickListener(this)
         textViewOptionThree.setOnClickListener(this)
         textViewOptionFour.setOnClickListener(this)
+        buttonSubmit.setOnClickListener(this)
     }
 
     private fun setQuestion(){
-        mCurrentPos = 1
         val question = mQuestionsList!![mCurrentPos-1]
         allOptionsView()
+        if(mCurrentPos == mQuestionsList!!.size){
+            buttonSubmit.text = "SEE RESULTS"
+        }else{
+            buttonSubmit.text = "SUBMIT"
+        }
         progressBarAnswer.progress = mCurrentPos
         textViewProgress.text = "$mCurrentPos/${progressBarAnswer.max}"
         textViewQuestion.text = question!!.question
@@ -71,6 +76,32 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
             R.id.textViewOptionTwo -> selectedOptionView(textViewOptionTwo,2)
             R.id.textViewOptionThree -> selectedOptionView(textViewOptionThree,3)
             R.id.textViewOptionFour -> selectedOptionView(textViewOptionFour,4)
+            R.id.buttonSubmit -> {
+                if(mSelectedOptionPos == 0){
+                    mCurrentPos++
+                    when{
+                        mCurrentPos <= mQuestionsList!!.size -> {
+                            setQuestion()
+                        }else->{
+                            //TODO: fill this place for end of quiz
+                        }
+                    }
+                }else{
+                    val question = mQuestionsList?.get(mCurrentPos-1)
+                    if(question!!.correctAnswer != mSelectedOptionPos){
+                        answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)
+                        answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg)
+                    }else{
+                        answerView(question!!.correctAnswer,R.drawable.true_answer_border_bg)
+                    }
+                    if(mCurrentPos == mQuestionsList!!.size){
+                        buttonSubmit.text = "SEE RESULTS"
+                    }else{
+                        buttonSubmit.text = "NEXT QUESTION"
+                    }
+                    mSelectedOptionPos = 0
+                }
+            }
         }
     }
 
@@ -84,5 +115,14 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
             this,
             R.drawable.selected_option_border_bg
         )
+    }
+
+    private fun answerView(answer: Int, drawableView: Int){
+        when(answer){
+            1 -> textViewOptionOne.background = ContextCompat.getDrawable(this,drawableView)
+            2 -> textViewOptionTwo.background = ContextCompat.getDrawable(this,drawableView)
+            3 -> textViewOptionThree.background = ContextCompat.getDrawable(this,drawableView)
+            4 -> textViewOptionFour.background = ContextCompat.getDrawable(this,drawableView)
+        }
     }
 }
