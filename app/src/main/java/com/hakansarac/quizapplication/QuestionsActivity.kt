@@ -11,11 +11,13 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_questions.*
 
+//TODO: check to cannot change the selection after submit.
 class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     //private members' name begins m
     private var mCurrentPos : Int = 1
     private var mQuestionsList : ArrayList<Question>? = null
     private var mSelectedOptionPos : Int = 0
+    private var mPoints : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +94,7 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
                         answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)
                         answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg)
                     }else{
+                        mPoints++
                         answerView(question!!.correctAnswer,R.drawable.true_answer_border_bg)
                     }
                     if(mCurrentPos == mQuestionsList!!.size){
