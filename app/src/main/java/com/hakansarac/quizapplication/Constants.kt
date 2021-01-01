@@ -2,7 +2,9 @@ package com.hakansarac.quizapplication
 
 object Constants {
 
-
+    const val USER_NAME : String = "user_name"
+    const val TOTAL_QUESTION : String = "total"
+    const val CORRECT_ANSWER : String = "correct"
     // START
     fun getQuestions(): ArrayList<Question> {
         val questionsList = ArrayList<Question>()

@@ -1,5 +1,6 @@
 package com.hakansarac.quizapplication
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.provider.SyncStateContract
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_questions.*
 
@@ -18,11 +20,15 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private var mQuestionsList : ArrayList<Question>? = null
     private var mSelectedOptionPos : Int = 0
     private var mPoints : Int = 0
+    private var isSelected : Boolean = false
+    private var isSubmitted : Boolean = false
+    private var mUserName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
 
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
         mQuestionsList = Constants.getQuestions()
         //Log.i("Question Size","${questionsList.size}")
         setQuestion()
@@ -40,11 +46,9 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private fun setQuestion(){
         val question = mQuestionsList!![mCurrentPos-1]
         allOptionsView()
-        if(mCurrentPos == mQuestionsList!!.size){
-            buttonSubmit.text = "SEE RESULTS"
-        }else{
-            buttonSubmit.text = "SUBMIT"
-        }
+
+        buttonSubmit.text = "SUBMIT"
+
         progressBarAnswer.progress = mCurrentPos
         textViewProgress.text = "$mCurrentPos/${progressBarAnswer.max}"
         textViewQuestion.text = question!!.question
@@ -74,21 +78,52 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when(p0?.id){
-            R.id.textViewOptionOne -> selectedOptionView(textViewOptionOne,1)
-            R.id.textViewOptionTwo -> selectedOptionView(textViewOptionTwo,2)
-            R.id.textViewOptionThree -> selectedOptionView(textViewOptionThree,3)
-            R.id.textViewOptionFour -> selectedOptionView(textViewOptionFour,4)
+
+            R.id.textViewOptionOne -> {
+                when{ !isSubmitted -> {
+                    isSelected = true
+                    selectedOptionView(textViewOptionOne,1)
+                }}
+            }
+            R.id.textViewOptionTwo -> {
+                when{ !isSubmitted -> {
+                    isSelected = true
+                    selectedOptionView(textViewOptionTwo,2)
+                }}
+            }
+            R.id.textViewOptionThree -> {
+                when{ !isSubmitted -> {
+                    isSelected = true
+                    selectedOptionView(textViewOptionThree,3)
+                }}
+            }
+            R.id.textViewOptionFour -> {
+                when{ !isSubmitted -> {
+                    isSelected = true
+                    selectedOptionView(textViewOptionFour,4)
+                }}
+            }
+
+
             R.id.buttonSubmit -> {
-                if(mSelectedOptionPos == 0){
+                if(isSubmitted){
+                    isSubmitted = false
                     mCurrentPos++
                     when{
                         mCurrentPos <= mQuestionsList!!.size -> {
+                            isSelected = false
                             setQuestion()
                         }else->{
-                            //TODO: fill this place for end of quiz
+                            val intent = Intent(this,ResultActivity::class.java)
+                            intent.putExtra(Constants.USER_NAME,mUserName)
+                            intent.putExtra(Constants.CORRECT_ANSWER,mPoints)
+                            intent.putExtra(Constants.TOTAL_QUESTION,mQuestionsList?.size)
+                            startActivity(intent)
+                            finish()
                         }
                     }
-                }else{
+                }else if(isSelected && !isSubmitted){
+                    isSubmitted = true
                     val question = mQuestionsList?.get(mCurrentPos-1)
                     if(question!!.correctAnswer != mSelectedOptionPos){
                         answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)
@@ -103,6 +138,11 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
                         buttonSubmit.text = "NEXT QUESTION"
                     }
                     mSelectedOptionPos = 0
+                }
+                else{
+                    isSubmitted = false
+                    isSelected = false
+                    Toast.makeText(this,"Please select an option.",Toast.LENGTH_SHORT).show()
                 }
             }
         }
