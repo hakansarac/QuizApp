@@ -5,9 +5,10 @@ object Constants {
     const val USER_NAME : String = "user_name"
     const val TOTAL_QUESTION : String = "total"
     const val CORRECT_ANSWER : String = "correct"
-    // START
+
     fun getQuestions(): ArrayList<Question> {
-        val questionsList = ArrayList<Question>()
+        val questionsList = ArrayList<Question>() //to keep all questions in an array end return them as an one ArrayList
+        //TODO: questions created by hard-coding; it must be changed
 
         // 1
         val que1 = Question(
@@ -91,6 +92,4 @@ object Constants {
         questionsList.add(que10)
         return questionsList
     }
-    // END
 }
-// END

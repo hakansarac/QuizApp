@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_questions.*
 
-//TODO: check to cannot change the selection after submit.
+
 class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     //private members' name begins m
     private var mCurrentPos : Int = 1
@@ -106,14 +106,14 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
 
             R.id.buttonSubmit -> {
-                if(isSubmitted){
-                    isSubmitted = false
-                    mCurrentPos++
+                if(isSubmitted){            //if user submitted the answer already, we go to next question when user presses button.
+                    isSubmitted = false     //the submit button will be activate.
+                    mCurrentPos++           //question position will be increased by one.
                     when{
-                        mCurrentPos <= mQuestionsList!!.size -> {
-                            isSelected = false
-                            setQuestion()
-                        }else->{
+                        mCurrentPos <= mQuestionsList!!.size -> {   //if questions are still not over
+                            isSelected = false                      //all answers will be unselected
+                            setQuestion()                           //new question will be created
+                        }else->{                                    //if questions are over, go to result activity
                             val intent = Intent(this,ResultActivity::class.java)
                             intent.putExtra(Constants.USER_NAME,mUserName)
                             intent.putExtra(Constants.CORRECT_ANSWER,mPoints)
@@ -122,19 +122,19 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
                             finish()
                         }
                     }
-                }else if(isSelected && !isSubmitted){
+                }else if(isSelected && !isSubmitted){       //if user selected an answer but not submitted yet; when user presses button, we check the correctness of answer
                     isSubmitted = true
                     val question = mQuestionsList?.get(mCurrentPos-1)
-                    if(question!!.correctAnswer != mSelectedOptionPos){
+                    if(question!!.correctAnswer != mSelectedOptionPos){     //if users answer is wrong then do...
                         answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)
                         answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg)
-                    }else{
+                    }else{      //if users answer is correct then do...
                         mPoints++
                         answerView(question!!.correctAnswer,R.drawable.true_answer_border_bg)
                     }
-                    if(mCurrentPos == mQuestionsList!!.size){
+                    if(mCurrentPos == mQuestionsList!!.size){       //set the button text as "see result" if user submit the answer and there is no question anymore.
                         buttonSubmit.text = "SEE RESULTS"
-                    }else{
+                    }else{                                          //set the button text as "next question" if user submit the answer and there is still any questions.
                         buttonSubmit.text = "NEXT QUESTION"
                     }
                     mSelectedOptionPos = 0
