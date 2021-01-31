@@ -43,6 +43,9 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         buttonSubmit.setOnClickListener(this)
     }
 
+    /**
+     * setting UI of new questions
+     */
     private fun setQuestion(){
         val question = mQuestionsList!![mCurrentPos-1]
         allOptionsView()
@@ -59,6 +62,9 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         textViewOptionFour.text = question.optionFour
     }
 
+    /**
+     * set the options by default when it just created
+     */
     private fun allOptionsView(){
         val options = ArrayList<TextView>()
         options.add(0,textViewOptionOne)
@@ -126,11 +132,11 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
                     isSubmitted = true
                     val question = mQuestionsList?.get(mCurrentPos-1)
                     if(question!!.correctAnswer != mSelectedOptionPos){     //if users answer is wrong then do...
-                        answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)
-                        answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg)
+                        answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)    //submitted but wrong option
+                        answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg) //not submitted but correct option
                     }else{      //if users answer is correct then do...
                         mPoints++
-                        answerView(question!!.correctAnswer,R.drawable.true_answer_border_bg)
+                        answerView(question!!.correctAnswer,R.drawable.true_answer_border_bg)   //submitted and correct option
                     }
                     if(mCurrentPos == mQuestionsList!!.size){       //set the button text as "see result" if user submit the answer and there is no question anymore.
                         buttonSubmit.text = "SEE RESULTS"
@@ -148,6 +154,9 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * set the selected option view
+     */
     private fun selectedOptionView(textView:TextView,selectedOption:Int){
         allOptionsView()    //when selected new option, all options must be default first.
         mSelectedOptionPos = selectedOption
@@ -160,6 +169,9 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         )
     }
 
+    /**
+     * set the options according to correct or incorrect
+     */
     private fun answerView(answer: Int, drawableView: Int){
         when(answer){
             1 -> textViewOptionOne.background = ContextCompat.getDrawable(this,drawableView)
