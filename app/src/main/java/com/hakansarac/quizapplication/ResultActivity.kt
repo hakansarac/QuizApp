@@ -13,7 +13,10 @@ class ResultActivity : AppCompatActivity() {
         setContentView(R.layout.activity_result)
 
 
-        /**getting some values from former activities*/
+        /**
+         * getting some values from former activities,
+         * get the details from intent and set it to the UI.
+         */
         val userName = intent.getStringExtra(Constants.USER_NAME)
         val totalQuestions = intent.getIntExtra(Constants.TOTAL_QUESTION,0)
         val points = intent.getIntExtra(Constants.CORRECT_ANSWER,0)
@@ -23,6 +26,7 @@ class ResultActivity : AppCompatActivity() {
 
     }
 
+    //add a click event to the finish button
     fun buttonFinish(view: View){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)

@@ -2,6 +2,7 @@ package com.hakansarac.quizapplication
 
 object Constants {
 
+    // Create constant variables which we required in the result screen
     const val USER_NAME : String = "user_name"
     const val TOTAL_QUESTION : String = "total"
     const val CORRECT_ANSWER : String = "correct"

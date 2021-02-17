@@ -28,6 +28,7 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
 
+        //STEP 4: Get the NAME from intent and assign it the variable.
         mUserName = intent.getStringExtra(Constants.USER_NAME)
         mQuestionsList = Constants.getQuestions()
         //Log.i("Question Size","${questionsList.size}")
@@ -131,7 +132,7 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
                 }else if(isSelected && !isSubmitted){       //if user selected an answer but not submitted yet; when user presses button, we check the correctness of answer
                     isSubmitted = true
                     val question = mQuestionsList?.get(mCurrentPos-1)
-                    if(question!!.correctAnswer != mSelectedOptionPos){     //if users answer is wrong then do...
+                    if(question!!.correctAnswer != mSelectedOptionPos){     //if user's answer is wrong then do...
                         answerView(mSelectedOptionPos,R.drawable.wrong_option_border_bg)    //submitted but wrong option
                         answerView(question!!.correctAnswer,R.drawable.correct_option_border_bg) //not submitted but correct option
                     }else{      //if users answer is correct then do...
